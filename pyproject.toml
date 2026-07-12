@@ -23,8 +23,3 @@ build-backend = "setuptools.build_meta"
 
 [project.scripts]
 fm = "main:main"
-
-
-[project.urls]
-Homepage = "placeholder"
-Issues = "placeholder"
