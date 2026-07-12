@@ -1,10 +1,13 @@
 import ansi_codes as ac
 import json
 import globals
+import os
 
 
 def check_for_first_run():
     if not globals.FMDATA.exists():
+        os.mkdir(globals.FMDATA)
+        
         with open(globals.FMALIASLOOKUP, "w") as file:
             json.dump({}, file, indent=4)
 
