@@ -69,6 +69,8 @@ def undo() -> None:
 
 
 def main() -> None:
+    check_for_first_run()
+    
     command: list[str] = argv
 
 
