@@ -5,6 +5,10 @@ description = "Simple command-line file tagger"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = []
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: POSIX :: Linux"
+]
 authors = [
     { name="Charlie O'Dwyer", email="charlieodwyer2289@gmail.com" }
 ]
