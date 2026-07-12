@@ -9,6 +9,7 @@ authors = [
     { name="Charlie O'Dwyer", email="charlieodwyer2289@gmail.com" }
 ]
 license = "MIT"
+license-files = ["LICENSE.txt"]
 
 
 [build-system]
