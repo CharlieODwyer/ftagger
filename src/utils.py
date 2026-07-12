@@ -4,10 +4,10 @@ import globals
 import os
 
 
-def check_for_first_run():
+def check_for_first_run() -> bool:
     if not globals.FMDATA.exists():
         os.mkdir(globals.FMDATA)
-        
+                
         with open(globals.FMALIASLOOKUP, "w") as file:
             json.dump({}, file, indent=4)
 
@@ -36,7 +36,7 @@ def check_for_first_run():
             json.dump(default_data, file, indent=4)
 
 
-        with open(globals.FMUNDOLOOKUP) as file:
+        with open(globals.FMUNDOLOOKUP, "w") as file:
             default_data: dict = {
                 "at": "rt",
                 "rt": "at",
@@ -46,6 +46,8 @@ def check_for_first_run():
                 "ra": "ca",
                 "tag": "rt"
             }
+
+            json.dump(default_data, file, indent=4)
 
 
         with open(globals.FMPREVIOUSCOMMAND, "w") as file:
@@ -67,6 +69,8 @@ def check_for_first_run():
                 ]
             }
 
+            json.dump(default_data, file, indent=4)
+        
 
 def error(text: str) -> None:
     print(f"{ac.red}{text}{ac.clear}")
