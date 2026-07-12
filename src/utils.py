@@ -5,7 +5,7 @@ from globals import *
 
 
 def check_for_first_run():
-    if not Path.exists(f"{Path.home()}/.fmdata"):
+    if not FMDATA.exists():
         with open(globals.FMALIASLOOKUP, "w") as file:
             json.dump({}, file, indent=4)
 
