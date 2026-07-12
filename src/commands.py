@@ -249,25 +249,20 @@ def reset_data() -> None:
 
     with open(globals.FMPREVIOUSCOMMAND, "w") as file:
         default_data: dict = {
-            "0": [
-                "/home/charlie/.local/bin/fm",
-                "la"
-            ],
-            "1": [
-                "/home/charlie/.local/bin/fm",
-                "undo"
-            ],
-            "2": [
-                "/home/charlie/.local/bin/fm",
-                "efdsfs"
-            ],
-            "3": [
-                "/home/charlie/.local/bin/fm",
-                "efdsfs"
-            ],
-            "4": [
-                "/home/charlie/Projects/fm/.venv/bin/fm",
-                "rd"
-            ]
-        }
+                "0": [
+                    "Default",
+                ],
+                "1": [
+                    "Default",
+                ],
+                "2": [
+                    "Default",
+                ],
+                "3": [
+                    "Default",
+                ],
+                "4": [
+                    "Default",
+                ]
+            }
 
