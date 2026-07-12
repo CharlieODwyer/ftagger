@@ -1,0 +1,25 @@
+[project]
+name = "ftagger"
+version = "0.1.0"
+description = "Simple command-line file tagger"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+authors = [
+    { name="Charlie O'Dwyer", email="charlieodwyer2289@gmail.com" }
+]
+license = "MIT"
+
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+
+[project.scripts]
+fm = "main:main"
+
+
+[project.urls]
+Homepage = "placeholder"
+Issues = "placeholder"
