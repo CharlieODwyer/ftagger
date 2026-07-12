@@ -1,6 +1,6 @@
 # Preface
 
-Most of this project was created before I began using GitHub, which is why the first commit is alreadyalmost finished..
+Most of this project was created before I began using GitHub, which is why the first commit is already almost finished.
 
 I have yet to implement proper error handling, as well as a few commands.
 
