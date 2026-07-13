@@ -80,18 +80,18 @@ pipx uninstall ftagger
 # Usage
 After installation, you should be able to run the programme from a terminal. Here is an example of what that may look like:
 ```
-fm at file1.txt tag
+ftagger at file1.txt tag
 ```
 
 Here is a breakdown of that example command:
-    fm — the command used to invoke this programme. It is like cd, ls, cat, etc
+    ftagger — the command used to invoke this programme. It is like cd, ls, cat, etc
     at — the 'add tag' command
     file1.txt — the target. This can be a file or a folder
     tag — the tag to add to the target
 
 To get help about the usage of the commands, run the following command:
 ```
-fm --help
+ftagger --help
 ```
 
 This will print out the table seen under the 'Help' heading. 
