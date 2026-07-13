@@ -67,13 +67,18 @@ OR
 pipx install ftagger
 ```
 
-### To uninstall
+### To uninstall (one extra step)
 ```
 pip uninstall ftagger
 
 OR
 
 pipx uninstall ftagger
+```
+
+After running that, you will then need to remove the dotfiles located at ~/.fmdata. You may run:
+```
+rm -rf ~/.fmdata
 ```
 
 
