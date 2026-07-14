@@ -10,7 +10,7 @@ from utils import *
 def help() -> None:
     info(
         "|   Name   |                   Description                    |           Usage               |",
-        "|---------------------------------------------------------------------------------------------|",
+        "|----------|--------------------------------------------------|-------------------------------|",
         "|    at    |    adds a tag to file or folder                  |    at <path> <tag>            |",
         "|    rt    |    removes a tag from file or folder             |    rt <path> <tag>            |",
         "|    gi    |    gets items by tag                             |    gi <path> <tag>            |",
@@ -40,19 +40,25 @@ def add_tag(path: str, tag: str) -> None:
     else:
         combined_tag: bytes = tag
 
-    
-    os.setxattr(path=path, attribute=b"user.tags", value=combined_tag)
+
+    try:
+        os.setxattr(path=path, attribute=b"user.tags", value=combined_tag)
+        
+    except PermissionError:
+        print("Permission denied")
 
 
 def remove_tag(path: str, tag: str) -> None:
-    tag: bytes = tag.encode('utf-8')
-
-
     values: list[str] = os.getxattr(path=path, attribute=b"user.tags").decode('utf-8').split(",")
-    values.remove(tag.decode('utf-8'))
+    values.remove(tag)
     values = ",".join(values).encode('utf-8')
 
-    os.setxattr(path=path, attribute=b"user.tags", value=values)
+
+    try:
+        os.setxattr(path=path, attribute=b"user.tags", value=values)
+
+    except PermissionError:
+        print("Permission denied")
 
 
 def get_items_by_tag(path: str, value: str) -> None:
