@@ -1,7 +1,8 @@
-import ansi_codes as ac
 import json
 import globals
 import os
+
+import ansi_codes as ac
 
 
 def check_for_first_run() -> bool:

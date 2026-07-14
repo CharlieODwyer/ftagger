@@ -1,10 +1,12 @@
-import commands
 import json
 import globals
 import sys
 import pathlib
 
+import commands
+
 from utils import *
+
 
 
 def call(args: list[str]) -> None:
@@ -35,7 +37,7 @@ def call(args: list[str]) -> None:
         print(f"ftagger: {args[2]}: No such file or directory")
         exit()
 
-        
+
     try:
         match len(args):
             case 1:
