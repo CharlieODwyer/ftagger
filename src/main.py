@@ -75,7 +75,7 @@ def undo() -> None:
 
 def main() -> None:
     if is_first_run():
-        call(['ftagger', 'rd'])
+        commands.reset_data()
     
     command: list[str] = sys.argv
 
