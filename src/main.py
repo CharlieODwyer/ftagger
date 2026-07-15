@@ -74,7 +74,8 @@ def undo() -> None:
 
 
 def main() -> None:
-    check_for_first_run()
+    if is_first_run():
+        call(['ftagger', 'rd'])
     
     command: list[str] = sys.argv
 
@@ -92,7 +93,6 @@ def main() -> None:
 
     with open(globals.FMPREVIOUSCOMMAND, "w") as file:
         json.dump(previous_commands, file, indent=4)
-
 
     call(command)
 
