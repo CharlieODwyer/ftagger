@@ -1,8 +1,7 @@
 import os
 import json
 import globals
-
-from pathlib import Path
+import pathlib
 
 from utils import *
 
@@ -28,18 +27,15 @@ def help() -> None:
 def add_tag(path: str, tag: str) -> None:
     tag: bytes = tag.encode('utf-8')
 
-
     try:
         current_tag: bytes = os.getxattr(path=path, attribute=b"user.tags")
     except:
         current_tag = "".encode('utf-8')
 
-
     if current_tag != b'': 
         combined_tag: bytes = current_tag + ",".encode('utf-8') + tag
     else:
         combined_tag: bytes = tag
-
 
     try:
         os.setxattr(path=path, attribute=b"user.tags", value=combined_tag)
@@ -53,7 +49,6 @@ def remove_tag(path: str, tag: str) -> None:
     values.remove(tag)
     values = ",".join(values).encode('utf-8')
 
-
     try:
         os.setxattr(path=path, attribute=b"user.tags", value=values)
 
@@ -62,13 +57,12 @@ def remove_tag(path: str, tag: str) -> None:
 
 
 def get_items_by_tag(path: str, value: str) -> None:
-    for item in Path(path).rglob("*"):
+    for item in pathlib.Path(path).rglob("*"):
         try:
             tags = os.getxattr(path=item, attribute=b"user.tags").decode('utf-8').split(",")
         
         except:
             tags = []
-
 
         if value in tags:
             if os.path.isdir(item):
@@ -80,26 +74,22 @@ def get_items_by_tag(path: str, value: str) -> None:
 
 def get_tags(path: str) -> None:
     try:
-        tags = os.getxattr(path=path, attribute=b"user.tags").decode('utf-8')
-
-        tags = tags.split(",")
+        tags = os.getxattr(path=path, attribute=b"user.tags").decode('utf-8').split(",")
 
     except:
-        tags = ["~"]
-
-    for i in tags:
-        if tags == []:
-            print("~")
-        else:
-            print(i)
+        return
+    
+    for tag in tags:
+        print(tag)
 
 
 def list_items_and_tags(path: str) -> None:
-    for item in Path(path).rglob("*"):
+    for item in pathlib.Path(path).rglob("*"):
         try:
             tags = os.getxattr(path=item, attribute=b"user.tags").decode('utf-8')
         except:
             tags = ""
+
 
         if os.path.isdir(item):
             print(f"{ac.blue}{ac.bold}{str(item): <30}{ac.clear}{tags: >15}")
@@ -108,22 +98,32 @@ def list_items_and_tags(path: str) -> None:
 
 
 def recursive_add_tag(path: str, tag: str, depth: int) -> None:
-    depth = int(depth)
+    try:
+        depth = int(depth)
+    except:
+        print(f"ftagger: {depth}: Must be an integer")
+        return
 
-    for item in Path(path).rglob("*"):
-        if len(str(item).split("/")) <= depth:
+
+    for item in pathlib.Path(path).rglob("*"):
+        item = str(item).split("/")
+
+        if len(item) <= depth:
             add_tag(item, tag=tag)
 
 
 def recursive_remove_tag(path: str, tag: str, depth: int) -> None:
     depth = int(depth)
 
-    for item in Path(path).rglob("*"):
+    for item in pathlib.Path(path).rglob("*"):
         if len(str(item).split("/")) <= depth:
+            item = str(item).split("/")
+
             try:
                 remove_tag(item, tag)
+                print(f"{item}: Removed tag {tag}")
             except:
-                print(f"Item {item} doesn't have tag {tag}")
+                print(f"{item}: no tag {tag}")
 
 
 def create_alias(command: str, alias: str) -> None:
@@ -131,82 +131,123 @@ def create_alias(command: str, alias: str) -> None:
         try:
             commands_dict: dict = json.load(file)
         except:
-            commands_dict: dict = {}
+            broken_config_error()
+            return
+
+        if command not in commands_dict.keys():
+            print(f"ftagger: {command}: Command does not exist")
+            return
 
 
-        with open(globals.FMALIASLOOKUP, "r") as fm_alias_lookup_file, open(globals.FMALIASES, "r") as fm_alias_file:
-            try:
-                lookup_dict: dict = json.load(fm_alias_lookup_file)
-            except:
-                lookup_dict: dict = {}
+    with open(globals.FMALIASLOOKUP, "r") as file:
+        try:
+            lookup_dict: dict = json.load(file)
+        except:
+            broken_config_error()
+            return
+
+        lookup_dict.update({ alias: command })
 
 
-            try:
-                alias_dict: dict = json.load(fm_alias_file)
-            except:
-                alias_dict: dict = {}
+    with open(globals.FMALIASLOOKUP, "w") as file:
+        json.dump(lookup_dict, file, indent=4)
 
 
-            lookup_dict.update({ alias: command })
-            alias_dict.update({ alias: commands_dict[command] })
+    with open(globals.FMALIASES, "r") as file:
+        try:
+            alias_dict: dict = json.load(file)
+        except:
+            alias_dict: dict = {} # No broken_config_error(), because the FMALIAS
+                                  # file is not needed for the programme to operate
+
+        alias_dict.update({ alias: commands_dict[command] })
 
 
-        with open(globals.FMALIASLOOKUP, "w") as fm_alias_lookup_file, open(globals.FMALIASES, "w") as fm_alias_file:
-            json.dump(lookup_dict, fm_alias_lookup_file, indent=4)
-            json.dump(alias_dict, fm_alias_file, indent=4)
+    with open(globals.FMALIASES, "w") as file:
+        try:
+            json.dump(alias_dict, file, indent=4)
+        except:
+            json.dump({}, file, indent=4)
 
 
     with open(globals.FMUNDOLOOKUP, "r") as file:
         undo_dict = json.load(file)
-
         undo_dict.update({ alias: undo_dict[command] })
 
 
     with open(globals.FMUNDOLOOKUP, "w") as file:
-        json.dump(undo_dict, file, indent=4)
-
-
-def remove_alias(alias: str) -> None:
-    with open(globals.FMALIASLOOKUP, "r") as fm_alias_lookup_file, open(globals.FMALIASES, "r") as fm_aliases_file:
         try:
-            alias_dict: dict = json.load(fm_aliases_file)
-            lookup_dict: dict = json.load(fm_alias_lookup_file)
+            json.dump(undo_dict, file, indent=4)
         except:
-            alias_dict: dict = {}
-            lookup_dict: dict = {}
-            error("Please use the 'rd' command and re-add your aliases")
-
-
-        try:
-            lookup_dict.pop(alias)
-            alias_dict.pop(alias)
-        except:
-            error("Alias does not exist")
+            broken_config_error()
             return
 
 
-    with open(globals.FMALIASLOOKUP, "w") as fm_alias_lookup_file, open(globals.FMALIASES, "w") as fm_aliases_file:
+def remove_alias(alias: str) -> None:
+    with open(globals.FMALIASLOOKUP, "r") as file:
         try:
-            json.dump(lookup_dict, fm_alias_lookup_file, indent=4)
-            json.dump(alias_dict, fm_aliases_file, indent=4)
+            lookup_dict: dict = json.load(file)
         except:
-            json.dump({}, fm_alias_lookup_file, indent=4)
-            json.dump({}, fm_aliases_file, indent=4)
+            broken_config_error()
+            return
+        
+        try:
+            lookup_dict.pop(alias)
+        except:
+            print(f"ftagger: {alias}: No such alias")
+            return
+        
+    with open(globals.FMALIASLOOKUP, "w") as file:
+        try:
+            json.dump(lookup_dict, file, indent=4)
+        except:
+            broken_config_error()
+            return
+
+
+    with open(globals.FMALIASES, "r") as file:
+        try:
+            alias_dict: dict = json.load(file)
+        except:
+            alias_dict: dict = {} # No broken_config_error(), because the FMALIAS
+                                  # file is not needed for the programme to operate
+
+        try:
+            alias_dict.pop(alias)
+        except:
+            print(f"ftagger: {alias}: No such alias")
+            return
+            
+    with open(globals.FMALIASES, "w") as file:
+        try:
+            json.dump(alias_dict, file, indent=4)
+        except:
+            json.dump({}, file, indent=4)
 
 
     with open(globals.FMUNDOLOOKUP, "r") as file:
-        undo_dict = json.load(file)
-
-        undo_dict.pop(alias)
-
+        try:
+            undo_dict = json.load(file)
+            undo_dict.pop(alias)
+        except:
+            broken_config_error()
+            return
 
     with open(globals.FMUNDOLOOKUP, "w") as file:
-        json.dump(undo_dict, file, indent=4)
+        try:
+            json.dump(undo_dict, file, indent=4)
+        except:
+            broken_config_error
+            return
         
 
 def list_aliases() -> None:
     with open(globals.FMALIASLOOKUP, "r") as file:
-        aliases: dict = json.load(file)
+        try:
+            aliases: dict = json.load(file)
+        except:
+            aliases = {}
+
 
         for key, value in aliases.items():
             print(f"{key}: {value}")
@@ -216,10 +257,8 @@ def reset_data() -> None:
     with open(globals.FMALIASLOOKUP, "w") as file:
         json.dump({}, file, indent=4)
 
-
     with open(globals.FMALIASES, "w") as file:
         json.dump({}, file, indent=4)
-
 
     with open(globals.FMDEFAULT, "w") as file:
         default_data: dict = {
@@ -240,8 +279,7 @@ def reset_data() -> None:
 
         json.dump(default_data, file, indent=4)
 
-
-    with open(globals.FMUNDOLOOKUP) as file:
+    with open(globals.FMUNDOLOOKUP, "w") as file:
         default_data: dict = {
             "at": "rt",
             "rt": "at",
@@ -252,6 +290,7 @@ def reset_data() -> None:
             "tag": "rt"
         }
 
+        json.dump(default_data, file, indent=4)
 
     with open(globals.FMPREVIOUSCOMMAND, "w") as file:
         default_data: dict = {
@@ -272,3 +311,4 @@ def reset_data() -> None:
                 ]
             }
 
+        json.dump(default_data, file, indent=4)

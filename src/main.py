@@ -1,12 +1,9 @@
 import json
 import globals
 import sys
-import pathlib
 
 import commands
-
 from utils import *
-
 
 
 def call(args: list[str]) -> None:
@@ -33,15 +30,11 @@ def call(args: list[str]) -> None:
                 error(f"There may be an invalid alias. Please check the aliases you've added: {key}: {value}")
 
 
-    if not pathlib.Path(args[2]).exists():
-        print(f"ftagger: {args[2]}: No such file or directory")
-        exit()
-
-
     try:
         match len(args):
             case 1:
                 commands_dict["--help"]()
+                
             case 2:
                 commands_dict[args[1]]()
 
@@ -61,7 +54,6 @@ def call(args: list[str]) -> None:
         debug("Error handling is not yet fully implemented, as I have decided to change how to impement it. For debugging purposes, the exception will now be raised.")
         raise Exception
         
-
 
 def undo() -> None:
     with open(globals.FMPREVIOUSCOMMAND, "r") as file:
@@ -85,7 +77,6 @@ def main() -> None:
     check_for_first_run()
     
     command: list[str] = sys.argv
-
 
     with open(globals.FMPREVIOUSCOMMAND, "r") as file:
         previous_commands: dict = json.load(file)
