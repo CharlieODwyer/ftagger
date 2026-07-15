@@ -106,3 +106,11 @@ This will print out the table seen under the 'Help' heading.
 Python 3.10 and above
 
 The project has only been tested on Linux
+
+
+# Issues
+If you edit any dotfiles in ~/.fmdata manually, make sure you understand how to edit the others accordingly. 
+
+If there are any errors that mention broken dotfiles, use the 'rd' command to reset all of the dotfiles. If that doesn't fix the issue, please open an issue on the [GitHub repo](https://github.com/CharlieODwyer/ftagger.git).
+
+If the programme crashes for any reason (you recieve a full Python error), please open an issue on the [GitHub repo](https://github.com/CharlieODwyer/ftagger.git).
