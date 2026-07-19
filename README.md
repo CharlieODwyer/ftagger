@@ -2,7 +2,7 @@
 
 Most of this project was created before I began using GitHub, which is why the first commit is already almost finished.
 
-I have yet to implement proper error handling, as well as a few commands.
+Most error handling should be done now. I am now working on ironing out a few bugs.
 
 This is just a personal project that I will use for college. The goal is not for it to be perfect, but for it to work. 
 
