@@ -171,8 +171,15 @@ def create_alias(command: str, alias: str) -> None:
 
 
     with open(globals.FMUNDOLOOKUP, "r") as file:
-        undo_dict = json.load(file)
-        undo_dict.update({ alias: undo_dict[command] })
+        try:
+            undo_dict = json.load(file)
+        except:
+            broken_config_error()
+
+        try:
+            undo_dict.update({ alias: undo_dict[command] })
+        except:
+            pass
 
 
     with open(globals.FMUNDOLOOKUP, "w") as file:
