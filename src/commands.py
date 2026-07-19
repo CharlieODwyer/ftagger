@@ -8,6 +8,7 @@ from utils import *
 
 def help() -> None:
     info(
+        "                                                                                               ",
         "|   Name   |                   Description                    |           Usage               |",
         "|----------|--------------------------------------------------|-------------------------------|",
         "|    at    |    adds a tag to file or folder                  |    at <path> <tag>            |",
@@ -21,6 +22,8 @@ def help() -> None:
         "|    ra    |    removes an alias                              |    ra <alias>                 |",
         "|    la    |    lists all existing aliases                    |    la                         |",
         "|    rd    |    resets all alias data                         |    rd                         |",
+        "                                                                                               ",
+
     )
 
 
