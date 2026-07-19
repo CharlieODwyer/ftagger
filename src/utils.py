@@ -1,4 +1,3 @@
-import json
 import globals
 import os
 
@@ -12,10 +11,6 @@ def is_first_run() -> bool:
         return True
     return False
         
-
-def error(text: str) -> None:
-    print(f"{ac.red}{text}{ac.clear}")
-
 
 def debug(text: str) -> None:
     print(f"{ac.green}{text}{ac.clear}")
